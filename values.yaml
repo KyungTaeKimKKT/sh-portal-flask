@@ -1,0 +1,90 @@
+### dns-admin/values.ymal
+replicaCount: 2
+
+image:
+  repository: shinwoohipo/portal-flask
+  tag: "1.0.0"
+  pullPolicy: Always
+
+service:
+  name: http
+  type: ClusterIP
+  port: 5000 
+  targetPort: 5000  # containerPort 로 mapping됨
+
+
+podPorts:
+  - name: IS_DOCKER
+    value: "true"
+  - name: SECRET_KEY
+    value: "CWmoIWr5wbKqW5Z5SvJ5SnEwfBkX6eepF7qTXk8ihurAg2MH8kkrCXh_54AhmzBQdVeC22etBsi3RD_IecN7DQ"
+  - name: API_BASE_URL
+    value: "http://drf.service.sh/"
+  - name: AUTH_URL
+    value: "api/users/login-in-portal/"
+
+# volumeMounts:
+#   - name: etc-pihole
+#     mountPath: /etc/pihole
+#   - name: etc-dnsmasq
+#     mountPath: /etc/dnsmasq.d
+
+# volumes:
+#   - name: etc-pihole
+#     hostPath:
+#       path: /mnt/pihole/etc-pihole
+#       type: DirectoryOrCreate
+#   - name: etc-dnsmasq
+#     hostPath:
+#       path: /mnt/pihole/etc-dnsmasq.d
+#       type: DirectoryOrCreate
+
+
+resources: {}
+
+# nodeSelector:
+#   dns-role: "true"
+
+tolerations: []
+affinity: {}
+
+
+### ✅ serviceaccount.yaml 용
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: ""
+
+### ✅ ingress-health.yaml 용
+### ingress.yaml 에서도  true면 맨 앞단에 추가함.
+ingressHealth:
+  namePostfix: ingress-health
+  enabled: true
+
+### ✅ ingress.yaml 용
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+  hosts:
+    - host: portal.service.sh
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: portal-flask
+              port:
+                number: 5000
+  tls: []
+
+### ✅ httproute.yaml 용 ==> 단순한거라, 그냥 ingress 사용함.
+httpRoute:
+  enabled: false
+
+### ✅ hpa.yaml 용
+autoscaling:
+  enabled: false
+

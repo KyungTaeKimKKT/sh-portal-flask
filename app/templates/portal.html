@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Portal</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='shinwoo.ico') }}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #007bff;
+            color: white;
+            padding: 15px 40px;
+            box-sizing: border-box;
+        }
+        header h1 {
+            margin: 0;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        header a:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            padding: 40px;
+            width: 80%;
+            max-width: 1000px;
+            box-sizing: border-box;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        .card img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            margin: 10px 0 5px 0;
+        }
+        .card p {
+            color: #666;
+            font-size: 14px;
+            height: 40px;
+            overflow: hidden;
+        }
+        .open-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        .open-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Service Portal</h1>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </header>
+
+    <div class="grid-container">
+        {% for site in sites %}
+        <div class="card">
+            {% if site.logo %}
+            <img src="{{ site.logo }}" alt="{{ site.name }}">
+            {% endif %}
+            <h3>{{ site.name }}</h3>
+            <p>{{ site.description }}</p>
+            <a class="open-btn" href="{{ site.url }}" target="_blank">Open</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+
