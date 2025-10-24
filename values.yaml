@@ -13,7 +13,7 @@ service:
   targetPort: 5000  # containerPort 로 mapping됨
 
 
-podPorts:
+env:
   - name: IS_DOCKER
     value: "true"
   - name: SECRET_KEY
